@@ -23,6 +23,11 @@ import { v4 as uuidv4 } from "uuid";
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    padding: "1rem",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "end",
     "& .MuiButtonBase-root-MuiPaginationItem-root": {
       color: "#fff",
       fontSize: "1rem",
@@ -58,7 +63,7 @@ export default function TableClient() {
   const [clients, setClients] = useState<Clients[]>([]);
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState(initialValue);
-
+  const [method, setMethod] = useState<"post" | "put">("post");
   const handleClose = () => setOpen(false);
 
   const [page, setPage] = useState(0);
@@ -66,20 +71,28 @@ export default function TableClient() {
     setPage(value);
   };
 
+  const getClients = async () => {
+    await api.get("/clients").then((response) => setClients(response.data));
+  };
+
   useEffect(() => {
-    api.get("/clients").then((response) => {
-      setClients(response.data);
-    });
+    getClients();
   }, []);
   console.log(clients);
 
   async function createClient() {
     const body = {
-      name: dataClients.name,
+      guid: uuidv4(),
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      address: "",
+      note: "",
+      isActive: true,
     };
-    await api.post("/clients", values).then((response) => {
-      setClients(response.data);
-    });
+    const { data } = await api.post("/clients", body);
+    setClients((oldClients) => [...oldClients, data]);
   }
 
   const handleOpen = () => {
@@ -146,7 +159,7 @@ export default function TableClient() {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className={classes.container} style={{ textAlign: "end" }}>
+      <div className={classes.container}>
         <Pagination
           variant="outlined"
           color="standard"
