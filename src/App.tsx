@@ -1,45 +1,30 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { TextField, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import Footer from "./components/footer";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Header from "./components/header";
+import TableClient from "./components/tableClient";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    position: "relative",
+    height: "100vh",
+    minHeight: "100%",
+  },
+  footer: {},
+}));
+
+export default function App() {
+  const classes = useStyles();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
-}
+    <div className={classes.container}>
+      <Header />
+      <div style={{ padding: "2rem" }}>
+        <TableClient />
+      </div>
 
-export default App
+      <Footer />
+    </div>
+  );
+}
