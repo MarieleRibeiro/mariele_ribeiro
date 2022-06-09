@@ -103,17 +103,17 @@ export function ManageClients() {
             render: renderActions,
         },
         {
-            title: 'Name',
+            title: 'Nome',
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: 'Company',
+            title: 'Empresa',
             dataIndex: 'company',
             key: 'company',
         },
         {
-            title: 'Phone',
+            title: 'Telefone',
             dataIndex: 'phone',
             key: 'phone',
             render: (value) => <div style={{ minWidth: '160px' }}>{value}</div>,
