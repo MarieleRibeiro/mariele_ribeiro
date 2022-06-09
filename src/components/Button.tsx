@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import { Button as AntdButton } from 'antd'
-import { BaseButtonProps } from 'antd/lib/button/button'
+import { ButtonProps } from 'antd/lib/button/button'
 
 const StyledButton = styled(AntdButton)`
     ${({ theme }) => css`
@@ -14,6 +14,6 @@ const StyledButton = styled(AntdButton)`
     `}
 `
 
-export const Button = ({ children, ...rest }: BaseButtonProps) => {
+export const Button = ({ children, ...rest }: ButtonProps) => {
     return <StyledButton {...rest}>{children}</StyledButton>
 }
