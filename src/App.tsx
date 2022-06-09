@@ -37,6 +37,8 @@ function ManageClients() {
     const { data, isLoading } = useQuery('clients', async () =>
         api.get<DataType[]>('clients')
     )
+
+    const [selectedClient, setSelectedClient] = useState<DataType | null>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const formRef = useRef<HTMLFormElement>(null)
 
@@ -73,7 +75,12 @@ function ManageClients() {
             render: (value, record) => {
                 return (
                     <>
-                        <FiEdit2 />
+                        <FiEdit2
+                            onClick={() => {
+                                setSelectedClient(record)
+                                toggleModal()
+                            }}
+                        />
                         <FiTrash
                             onClick={async () => removeClient(record.id)}
                         />
@@ -122,6 +129,15 @@ function ManageClients() {
                 isActive: true,
             }
 
+            if (selectedClient?.id) {
+                try {
+                    await api.put(`/clients/${selectedClient.id}`, payload)
+                    return
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+
             try {
                 await api.post('clients', payload)
             } catch (e) {
@@ -144,12 +160,33 @@ function ManageClients() {
                     ref={formRef}
                     onSubmit={(formEvent) => formEvent.preventDefault()}
                 >
-                    <input required name={'name'}></input>
-                    <input name={'company'}></input>
-                    <input required type={'email'} name={'email'}></input>
-                    <input name={'phone'}></input>
-                    <input name={'address'}></input>
-                    <textarea name={'note'}></textarea>
+                    <input
+                        defaultValue={selectedClient?.name}
+                        required
+                        name={'name'}
+                    />
+                    <input
+                        defaultValue={selectedClient?.company}
+                        name={'company'}
+                    />
+                    <input
+                        defaultValue={selectedClient?.email}
+                        required
+                        type={'email'}
+                        name={'email'}
+                    />
+                    <input
+                        defaultValue={selectedClient?.phone}
+                        name={'phone'}
+                    />
+                    <input
+                        defaultValue={selectedClient?.address}
+                        name={'address'}
+                    />
+                    <textarea
+                        defaultValue={selectedClient?.note}
+                        name={'note'}
+                    />
                 </form>
             </Modal>
             <Table dataSource={dataSource} columns={columns} />;
