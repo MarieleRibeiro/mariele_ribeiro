@@ -1,3 +1,4 @@
+import { FiFacebook, FiInstagram } from 'react-icons/fi'
 import styled, { css } from 'styled-components'
 
 const Container = styled.footer`
@@ -48,7 +49,16 @@ export const Footer = () => {
                 </Left>
                 <Right>
                     <strong>Nossas Redes Sociais</strong>
-                    <SocialMedia></SocialMedia>
+                    <SocialMedia>
+                        <a href="#">
+                            {' '}
+                            <FiFacebook size={32} />
+                        </a>
+                        <a href="#">
+                            {' '}
+                            <FiInstagram size={32} />
+                        </a>
+                    </SocialMedia>
                 </Right>
             </Content>
         </Container>

@@ -49,6 +49,16 @@
       "address": "595 Kimball Street, Comptche, Delaware, 8300",
       "note": "",
       "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Client",
+      "company": "Amplifyre GmbH",
+      "email": "client@gmail.com",
+      "phone": "33333",
+      "address": "Behrenstraße",
+      "note": "sem",
+      "isActive": true
     }
   ]
 }
