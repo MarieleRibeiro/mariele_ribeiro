@@ -40,6 +40,7 @@ function ManageClients() {
 
     const [selectedClient, setSelectedClient] = useState<DataType | null>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [search, setSearch] = useState('')
     const formRef = useRef<HTMLFormElement>(null)
 
     if (isLoading) {
@@ -50,10 +51,14 @@ function ManageClients() {
         return null
     }
 
-    const dataSource = data.data.map((item) => ({
-        ...item,
-        status: item.isActive,
-    }))
+    const dataSource = data.data
+        .map((item) => ({
+            ...item,
+            status: item.isActive,
+        }))
+        .filter((item) =>
+            item.name.toLowerCase().includes(search.toLowerCase())
+        )
 
     const toggleModal = () => {
         setIsModalVisible((prev) => !prev)
@@ -62,6 +67,7 @@ function ManageClients() {
     const removeClient = async (id: string) => {
         try {
             await api.delete('/clients/' + id)
+            queryClient.invalidateQueries('clients')
         } catch (e) {
             console.log(e)
         }
@@ -112,6 +118,7 @@ function ManageClients() {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            render: (value) => <>{value === true ? 'Ativo' : 'Inativo'}</>,
         },
     ]
 
@@ -132,6 +139,7 @@ function ManageClients() {
             if (selectedClient?.id) {
                 try {
                     await api.put(`/clients/${selectedClient.id}`, payload)
+                    queryClient.invalidateQueries('clients')
                     return
                 } catch (e) {
                     console.log(e)
@@ -140,6 +148,7 @@ function ManageClients() {
 
             try {
                 await api.post('clients', payload)
+                queryClient.invalidateQueries('clients')
             } catch (e) {
                 console.log(e)
             }
@@ -150,6 +159,7 @@ function ManageClients() {
         <Container>
             <Header />
             <Button onClick={toggleModal}>Adicionar novo Cliente</Button>
+            <input type="text" onChange={(e) => setSearch(e.target.value)} />
             <Modal
                 title="Dados do Cliente"
                 visible={isModalVisible}
