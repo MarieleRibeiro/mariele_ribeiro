@@ -8,9 +8,14 @@ const Container = styled.footer`
         display: flex;
         width: 100%;
         justify-content: center;
+
         strong {
             color: ${theme.colors.white};
             font-size: 24px;
+
+            @media (max-width: 920px) {
+                font-size: 16px;
+            }
         }
     `}
 `
@@ -19,6 +24,11 @@ const Content = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    gap: 8px;
+
+    @media (max-width: 475px) {
+        flex-direction: column;
+    }
 `
 
 const Left = styled.div`
@@ -51,11 +61,9 @@ export const Footer = () => {
                     <strong>Nossas Redes Sociais</strong>
                     <SocialMedia>
                         <a href="#">
-                            {' '}
                             <FiFacebook size={32} />
                         </a>
                         <a href="#">
-                            {' '}
                             <FiInstagram size={32} />
                         </a>
                     </SocialMedia>
