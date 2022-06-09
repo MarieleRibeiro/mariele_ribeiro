@@ -2,12 +2,14 @@ import 'antd/dist/antd.css'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from './styles/colors'
 import { Footer } from './components/Footer'
-import { Table } from 'antd'
+import { Modal, Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { FiEdit2, FiTrash } from 'react-icons/all'
 import { useQuery, QueryClient, QueryClientProvider } from 'react-query'
 import { api } from './components/api'
 import { Header } from './components/Header'
+import { Button } from './components/Button'
+import { useRef, useState } from 'react'
 
 interface DataType {
     id: string
@@ -32,9 +34,11 @@ const Container = styled.main`
 const queryClient = new QueryClient()
 
 function ManageClients() {
-    const { error, data, isLoading } = useQuery('clients', async () =>
+    const { data, isLoading } = useQuery('clients', async () =>
         api.get<DataType[]>('clients')
     )
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const formRef = useRef<HTMLFormElement>(null)
 
     if (isLoading) {
         return <>Carregando...</>
@@ -48,6 +52,10 @@ function ManageClients() {
         ...item,
         status: item.isActive,
     }))
+
+    const toggleModal = () => {
+        setIsModalVisible((prev) => !prev)
+    }
 
     const removeClient = async (id: string) => {
         try {
@@ -100,9 +108,50 @@ function ManageClients() {
         },
     ]
 
+    const onCreateClient = async () => {
+        if (formRef.current !== null) {
+            const formData = new FormData(formRef.current)
+            const payload = {
+                id: 2,
+                name: formData.get('name'),
+                company: formData.get('company'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                address: formData.get('address'),
+                note: formData.get('note'),
+                isActive: true,
+            }
+
+            try {
+                await api.post('clients', payload)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
     return (
         <Container>
             <Header />
+            <Button onClick={toggleModal}>Adicionar novo Cliente</Button>
+            <Modal
+                title="Dados do Cliente"
+                visible={isModalVisible}
+                onOk={onCreateClient}
+                onCancel={toggleModal}
+            >
+                <form
+                    ref={formRef}
+                    onSubmit={(formEvent) => formEvent.preventDefault()}
+                >
+                    <input required name={'name'}></input>
+                    <input name={'company'}></input>
+                    <input required type={'email'} name={'email'}></input>
+                    <input name={'phone'}></input>
+                    <input name={'address'}></input>
+                    <textarea name={'note'}></textarea>
+                </form>
+            </Modal>
             <Table dataSource={dataSource} columns={columns} />;
             <Footer />
         </Container>
