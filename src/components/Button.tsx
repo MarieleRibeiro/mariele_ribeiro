@@ -6,12 +6,13 @@ const StyledButton = styled(AntdButton)`
     ${({ theme }) => css`
         background: ${theme.colors.primary};
         color: ${theme.colors.white};
-        width: 30%;
         padding: 1.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1rem;
+        border-radius: 4px;
+
         &:hover {
             background: ${theme.colors.primary};
             color: ${theme.colors.white};
